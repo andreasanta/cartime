@@ -76,7 +76,8 @@ class Vehicle:
 
     # For testing purposes only ;)
     def clear_events(self):
-        self.events = []
+        # Never delete the initial registration event
+        self.events = self.events[0:1]
 
     # Calculate average mileage per year
     def average_yearly_miles(self):
@@ -104,7 +105,7 @@ class Vehicle:
         return average_miles
 
     # Project the mileage in the future based on yearly average 
-    def project_miles(self, date: datetime.date):
+    def project_miles(self, date: datetime.date = datetime.datetime.now()) -> int:
 
         # Calculate how old is the vehicle
         delta = self.events[-1].date - self.get_reg_date()
@@ -120,7 +121,7 @@ class Vehicle:
         return self.events[0].date
 
     # Retrieve vehicle last known mileage
-    def get_last_known_mileage(self):
+    def get_last_known_mileage(self) -> int:
         for e in reversed(self.events[1:]):
             if e.mileage is not None:
                 return e.mileage
