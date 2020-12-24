@@ -82,7 +82,7 @@ class Vehicle:
     def average_yearly_miles(self):
 
         # Take the initial date, always has mileage 0 and date
-        initial_event_date = self.events[0].date
+        initial_event_date = self.get_reg_date()
 
         # Look for the last event with mileage and get the date
         last_event_with_mileage : Event = None
@@ -97,9 +97,11 @@ class Vehicle:
 
         # If we found an event with mileage, use that date and miles instead
         delta_time = last_event_with_mileage.date - initial_event_date
+        print(delta_time)
 
         # This formula ensures we calculate partial years (i.e. when we have a datapoint in the current year) 
         average_miles = round(last_event_with_mileage.mileage / delta_time.days / 365.25)
+        print(average_miles)
 
         return average_miles
 
@@ -107,13 +109,25 @@ class Vehicle:
     def project_miles(self, date: datetime.date):
 
         # Calculate how old is the vehicle
-        delta = self.events[-1].date - self.events[0].date
+        delta = self.events[-1].date - self.get_reg_date()
 
         # Retrieve the annual mileage
         yearly_mileage = self.average_yearly_miles()
 
         # Multiply by fractional years
         return round(yearly_mileage * (delta.days / 365.25))
+
+    # Retrieve vehicle reg date
+    def get_reg_date(self):
+        return self.events[0].date
+
+    # Retrieve vehicle last known mileage
+    def get_last_known_mileage(self):
+        for e in reversed(self.events[1:]):
+            if e.mileage is not None:
+                return e.mileage
+
+        return None
 
 
     def __repr__(self):

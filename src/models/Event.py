@@ -15,4 +15,4 @@ class Event:
         self.mileage = mileage
 
     def __repr__(self) -> str:
-        return "EVT DATE %s, MILEAGE %d" % (self.date, self.mileage)
+        return "EVT DATE %s, MILEAGE %d" % (self.date, self.mileage if self.mileage else 0)

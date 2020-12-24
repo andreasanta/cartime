@@ -1,4 +1,5 @@
 import unittest
+from models.VrmEvent import VrmEvent
 
 from src.models.Vehicle import Vehicle
 
@@ -29,9 +30,19 @@ class VehicleTest(unittest.TestCase):
             else:
                 self.assertTrue(e.date > current_date)
 
-            self.assertGreaterEqual(e.mileage, current_mileage)
-
+            # Vrm Events have no mileage
+            if e.mileage:
+                self.assertGreaterEqual(e.mileage, current_mileage)
+                current_mileage = e.mileage
+                
+            
             current_date = e.date
-            current_mileage = e.mileage
-
             print(e)
+
+    def test_returns_valid_average_miles(self):
+        vehicle = Vehicle.generate_fake_vehicle()
+        yearly_miles = vehicle.average_yearly_miles()
+
+        print("Yearly Miles %d " % yearly_miles)
+
+        self.assertGreaterEqual(yearly_miles, 0)
