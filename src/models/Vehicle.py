@@ -66,13 +66,54 @@ class Vehicle:
             elif event_type == 'Sale':
                 vehicle.add_event(SaleEvent(cur_mileage, next_date, random.randint(5000,500000)))
             elif event_type == 'Vrm':
-                vehicle.add_event(VrmEvent(cur_mileage, next_date, fake.license_plate()))
+                vehicle.add_event(VrmEvent(next_date, fake.license_plate()))
 
         # Now we should have a vehicle with a nice series of events with progressive mileage ;)
         return vehicle  
 
     def add_event(self, e: Event):
         self.events.append(e)
+
+    # For testing purposes only ;)
+    def clear_events(self):
+        self.events = []
+
+    # Calculate average mileage per year
+    def average_yearly_miles(self):
+
+        # Take the initial date, always has mileage 0 and date
+        initial_event_date = self.events[0].date
+
+        # Look for the last event with mileage and get the date
+        last_event_with_mileage : Event = None
+        for e in reversed(self.events[1:]):
+            if e.mileage is not None:
+                last_event_with_mileage = e
+                break
+
+        # If no mileage found, just calculate the time difference
+        if last_event_with_mileage is None:
+            return Vehicle.DEFAULT_YEARLY_MILEAGE
+
+        # If we found an event with mileage, use that date and miles instead
+        delta_time = last_event_with_mileage.date - initial_event_date
+
+        # This formula ensures we calculate partial years (i.e. when we have a datapoint in the current year) 
+        average_miles = round(last_event_with_mileage.mileage / delta_time.days / 365.25)
+
+        return average_miles
+
+    # Project the mileage in the future based on yearly average 
+    def project_miles(self, date: datetime.date):
+
+        # Calculate how old is the vehicle
+        delta = self.events[-1].date - self.events[0].date
+
+        # Retrieve the annual mileage
+        yearly_mileage = self.average_yearly_miles()
+
+        # Multiply by fractional years
+        return round(yearly_mileage * (delta.days / 365.25))
 
 
     def __repr__(self):
