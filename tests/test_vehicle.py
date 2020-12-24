@@ -60,4 +60,4 @@ class VehicleTest(unittest.TestCase):
         if last_known_mileage is None:
             self.assertGreater(yearly_miles, 0)
 
-        self.assertGreater(yearly_miles, last_known_mileage)
+        self.assertGreaterEqual(yearly_miles, last_known_mileage)

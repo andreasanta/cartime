@@ -114,7 +114,7 @@ class Vehicle:
         yearly_mileage = self.average_yearly_miles()
 
         # Multiply by fractional years
-        return round(yearly_mileage * (delta.days / 365.25))
+        return max(round(yearly_mileage * (delta.days / 365.25)), self.get_last_known_mileage())
 
     # Retrieve vehicle reg date
     def get_reg_date(self):
