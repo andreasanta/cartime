@@ -3,10 +3,10 @@ from .Event import Event
 
 class VrmEvent(Event):
 
-    def __init__(self, mileage:int, date: datetime.date, new_vrm: str):
+    def __init__(self, date: datetime.date, new_vrm: str):
         
         # Init our base class
-        super().__init__(mileage, date)
+        super().__init__(None, date)
 
         self.new_vrm = new_vrm
 
