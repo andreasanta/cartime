@@ -97,11 +97,9 @@ class Vehicle:
 
         # If we found an event with mileage, use that date and miles instead
         delta_time = last_event_with_mileage.date - initial_event_date
-        print(delta_time)
 
         # This formula ensures we calculate partial years (i.e. when we have a datapoint in the current year) 
-        average_miles = round(last_event_with_mileage.mileage / delta_time.days / 365.25)
-        print(average_miles)
+        average_miles = round(last_event_with_mileage.mileage / delta_time.days * 365.25)
 
         return average_miles
 
